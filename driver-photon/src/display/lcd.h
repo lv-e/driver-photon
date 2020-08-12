@@ -32,6 +32,7 @@ class LCD {
         void configureSPI();
         void configureGPIO();
         void configureInterrupts();
+        void configureDrawRegion();
 
         void writeOnRegister(unsigned char index, unsigned int data);
         void writeTupleOnRegister(unsigned char index, unsigned char A, unsigned char B);

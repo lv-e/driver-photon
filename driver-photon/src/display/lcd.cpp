@@ -31,6 +31,7 @@ void LCD::loop(){
     isrActivated = false;
 
     SINGLE_THREADED_BLOCK(){
+        configureDrawRegion();
         _pins.beginTransmission();
         _pins.configureAsData();
         SPI.transfer((void*) _framebuffer, NULL, lcd_pixels * 2, NULL);
@@ -40,7 +41,10 @@ void LCD::loop(){
 
 void LCD::clear(unsigned int color){
     unsigned int i = 0;
-    while(i++ < lcd_pixels) _framebuffer[i] = color;
+    while(i < lcd_pixels) {
+        _framebuffer[i] = color;
+        i++;
+    }
 }
 
 void LCD::configureSPI(){
@@ -120,14 +124,17 @@ void LCD::sendStartupSequence(){
     writeOnRegister(0x12,0x0609); /* power control 3 */
     writeOnRegister(0x13,0x3100); /* power control 4 */
     delay(10);
+}
+
+void LCD::configureDrawRegion(){
 
     writeTupleOnRegister(0x44, 
-        _drawRegion.origin.x + _drawRegion.size.width + 2,
+        _drawRegion.origin.x + _drawRegion.size.width + 1,
         _drawRegion.origin.x + 2
     );
 
     writeTupleOnRegister(0x45, 
-        _drawRegion.origin.y + _drawRegion.size.height + 2,
+        _drawRegion.origin.y + _drawRegion.size.height + 1,
         _drawRegion.origin.y + 2
     );
 
@@ -170,11 +177,6 @@ void LCD::writeTupleOnRegister(unsigned char index, unsigned char A, unsigned ch
     _pins.beginTransmission();
     _pins.configureAsData();
     SPI.transfer(A);
-    _pins.endTransmission();
-
-    // write data B
-    _pins.beginTransmission();
-    _pins.configureAsData();
     SPI.transfer(B);
     _pins.endTransmission();
 }
