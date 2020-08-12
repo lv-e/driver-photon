@@ -4,4 +4,4 @@
 .LSOverride
 
 # Build artifacts
-driver-photon
+driver-photon/target/
