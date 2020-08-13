@@ -1,4 +1,4 @@
-#include "display/lcd.h"
+#include "driver/lcd.h"
 
 LCD lcd;
 unsigned int framecounter = 0;
@@ -6,7 +6,7 @@ unsigned int framecounter = 0;
 void setup() {
   pinMode(D7, OUTPUT);
   lcd.setup();
-  lcd.clear(0b1110000000000111);
+  lcd.clear(0b1110001110000101);
 }
 
 void loop() {
