@@ -5,5 +5,11 @@
     "files.associations": {
         "*.ino": "cpp"
     },
-    "particle.targetDevice": "lvndr"
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.exclude": {
+        "LICENSE": true,
+        ".gitignore": true,
+        ".vscode": true,
+        "project.properties": true
+    }
 }

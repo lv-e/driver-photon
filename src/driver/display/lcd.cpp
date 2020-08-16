@@ -1,5 +1,5 @@
 #include "lcd.h"
-#include "Particle.h"
+#include <Particle.h>
 
 extern "C" {
 

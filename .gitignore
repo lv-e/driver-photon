@@ -2,6 +2,3 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-
-# Build artifacts
-driver-photon/target/
