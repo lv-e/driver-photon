@@ -40,10 +40,12 @@ void LCD::loop(){
 }
 
 void LCD::clear(unsigned int color){
-    unsigned int i = 0;
-    while(i < lcd_pixels) {
-        _framebuffer[i] = color;
-        i++;
+    SINGLE_THREADED_BLOCK(){
+        unsigned int i = 0;
+        while(i < lcd_pixels) {
+            _framebuffer[i] = color;
+            i++;
+        }
     }
 }
 
@@ -73,14 +75,14 @@ void LCD::configureInterrupts(){
     // set the timer frequency
     timerInitStructure.TIM_Prescaler      = 1;
     timerInitStructure.TIM_CounterMode    = TIM_CounterMode_Up;
-    timerInitStructure.TIM_Period         = 1200;
+    timerInitStructure.TIM_Period         = 2400;
     timerInitStructure.TIM_ClockDivision  = TIM_CKD_DIV4;
     TIM_TimeBaseInit(TIMx, &timerInitStructure);
 
     // attach interrupt
     attachSystemInterrupt(SysInterrupt_TIM5_IRQ, timerISRoutine);
 
-    // make it go
+    // and run
     TIM_ITConfig(TIMx, TIM_IT_Update, ENABLE);
     TIM_Cmd(TIMx, ENABLE);
 

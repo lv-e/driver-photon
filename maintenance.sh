@@ -5,6 +5,7 @@ echo "hi! this is particle's photon driver mantenance script for lv-engine"
 ## available commands
 
 installEngine(){
+    #todo: checkout on tag?
     git submodule add --force --depth=1 git@github.com:lv-e/engine.git
     cd engine
     git reset --hard 
@@ -12,26 +13,9 @@ installEngine(){
     git pull --ff-only
 }
 
-updateEngine(){
-
-    local tmp=$(mktemp -d)
-    local current=$(pwd)
-
-    echo "will now download engines latest version at $tmp"
-    cd $tmp
-    git clone --no-checkout -q git@github.com:lv-e/engine.git
-    cd engine
-
-    git config core.sparseCheckout true
-    echo "lv-engine/*"> .git/info/sparse-checkout
-    git checkout master
-
-    echo "done! time to move things around. back to $current"
-    cd $current/src
-    rm -rf lv-engine
-    mv $tmp/engine/lv-engine lv-engine
-
-    rm -rf $tmp
+flashSandbox(){
+    #todo: ask device name
+    /Users/$(eval whoami)/bin/particle flash lvndr sandbox/game.ino src/driver
 }
 
 ## what should we do?
@@ -39,11 +23,12 @@ while true; do
 
         echo "available options are:"
         echo "1) update game engine"
+        echo "2) compile and flash sandbox game"
         read -p "choose one: " opt; echo "--"
 
         case $opt in
             1) installEngine; break;;
-            2) test; break;;
+            2) flashSandbox; break;;
             * ) echo "ok! bye."; exit;;
         esac
 done
