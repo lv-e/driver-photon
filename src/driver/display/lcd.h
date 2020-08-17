@@ -1,28 +1,39 @@
 #pragma once
+
 #include "pins.h"
 #include "geometry.h"
+#include "lvk.h"
 
-const unsigned short lcd_width     = 130;
-const unsigned short lcd_height    = 130;
+const unsigned short lcd_width     = lvk_display_w;
+const unsigned short lcd_height    = lvk_display_h;
 const unsigned short lcd_pixels    = lcd_width * lcd_height;
 
 class LCD {
 
     public:
 
-        LCD(
-            Region region = Region(lcd_width, lcd_height),
-            Pins pins = Pins()
-        );
+        static LCD& shared(){
+            static LCD instance;
+            return instance;
+        }
         
         void setup();
         void loop();
+
+        bool waitingFrame();
+        void beginDrawing();
+        void endDrawing();
 
         void clear(unsigned int color);
 
         ~LCD(void);
 
     private:
+
+        LCD(
+            Region region = Region(lcd_width, lcd_height),
+            Pins pins = Pins()
+        );
 
         Region _drawRegion;
         Pins _pins;

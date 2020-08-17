@@ -15,7 +15,7 @@ installEngine(){
 
 flashSandbox(){
     #todo: ask device name
-    /Users/$(eval whoami)/bin/particle flash lvndr sandbox/game.ino src/driver
+    /Users/$(eval whoami)/bin/particle flash lvndr sandbox/game.ino sandbox/lvk.h src/driver engine/lv-engine
 }
 
 ## what should we do?

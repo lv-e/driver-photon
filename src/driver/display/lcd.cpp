@@ -26,6 +26,20 @@ void LCD::setup(){
     _ready = true;
 }
 
+bool LCD::waitingFrame() {
+    return isrActivated;
+}
+
+void LCD::beginDrawing(){
+    configureDrawRegion();
+    _pins.beginTransmission();
+    _pins.configureAsData();
+}
+
+void LCD::endDrawing() {
+    _pins.endTransmission();
+}
+
 void LCD::loop(){
     if (!isrActivated) return;
     isrActivated = false;
