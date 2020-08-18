@@ -1,6 +1,18 @@
 #include "lcd.h"
 #include <Particle.h>
 
+void lvDriver_DrawHLine(lv::half line, lv::DuoPixelColor data[lvk_display_w/2]){
+    
+    static lv::half pixels[lvk_display_w] = {0};
+
+    for (int i = 0; i < lvk_display_w; i += 2) {
+      pixels[i]   = palette[data[i].a];
+      pixels[i+1] = palette[data[i].b];
+    }
+
+    LCD::shared().drawLine( (unsigned short*) &pixels);
+}
+
 extern "C" {
 
     volatile bool isrActivated = false;
@@ -31,36 +43,19 @@ bool LCD::waitingFrame() {
 }
 
 void LCD::beginDrawing(){
+    if (!isrActivated) return;
     configureDrawRegion();
     _pins.beginTransmission();
     _pins.configureAsData();
 }
 
+void LCD::drawLine(unsigned short* data){
+    SPI.transfer((void*) data, NULL, lcd_width * 2, NULL);
+}
+
 void LCD::endDrawing() {
     _pins.endTransmission();
-}
-
-void LCD::loop(){
-    if (!isrActivated) return;
     isrActivated = false;
-
-    SINGLE_THREADED_BLOCK(){
-        configureDrawRegion();
-        _pins.beginTransmission();
-        _pins.configureAsData();
-        SPI.transfer((void*) _framebuffer, NULL, lcd_pixels * 2, NULL);
-        _pins.endTransmission();
-    }
-}
-
-void LCD::clear(unsigned int color){
-    SINGLE_THREADED_BLOCK(){
-        unsigned int i = 0;
-        while(i < lcd_pixels) {
-            _framebuffer[i] = color;
-            i++;
-        }
-    }
 }
 
 void LCD::configureSPI(){
@@ -100,7 +95,7 @@ void LCD::configureInterrupts(){
     TIM_ITConfig(TIMx, TIM_IT_Update, ENABLE);
     TIM_Cmd(TIMx, ENABLE);
 
-    clear(0x00);
+    // clear(0x00);
 }
 
 void LCD::sendResetCommand(){

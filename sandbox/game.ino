@@ -1,29 +1,25 @@
 #include "driver.h"
 #include "engine.h"
 
-int frame = 0;
-
 void setup() {
+  // setup SPI & timers
   LCD::shared().setup();
 }
 
 void loop() {
 
-  if (LCD::shared().waitingFrame() == false) return;
-
+  // wait for v-sync
+  if (!LCD::shared().waitingFrame()) return;
+  
   SINGLE_THREADED_BLOCK(){
+
+    // then draw frame buffer to display
     LCD::shared().beginDrawing();
-    lv::director.draw();
+    lvDirector.draw();
     LCD::shared().endDrawing();
-    lv::director.update();
+
+    // and update game logic
+    // leaving graphics ready for next v-sync
+    lvDirector.update();
   }
-
-  // if ((frame++)%100 > 50) LCD::shared().clear(0b0001111110000101);
-  // else LCD::shared().clear(0b1110000000000011);
-
-  // LCD::shared().loop();
-
-  
-  // wait for frame
-  
 }

@@ -11,7 +11,13 @@
         "algorithm": "cpp",
         "functional": "cpp",
         "locale": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "array": "cpp",
+        "iterator": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "vector": "cpp",
+        "filesystem": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "files.exclude": {
