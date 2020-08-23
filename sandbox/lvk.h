@@ -11,3 +11,7 @@
 #ifndef lvk_display_w
 #define lvk_display_w 130
 #endif
+
+#ifndef lvk_octaspixels_per_line
+#define lvk_octaspixels_per_line 17
+#endif

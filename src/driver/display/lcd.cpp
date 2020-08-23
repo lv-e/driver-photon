@@ -1,16 +1,36 @@
 #include "lcd.h"
 #include <Particle.h>
 
-void lvDriver_DrawHLine(lv::half line, lv::DuoPixelColor data[lvk_display_w/2]){
-    
-    static lv::half pixels[lvk_display_w] = {0};
 
-    for (int i = 0; i < lvk_display_w; i += 2) {
-      pixels[i]   = palette[data[i].a];
-      pixels[i+1] = palette[data[i].b];
+void lvDriver_DrawHLine(lv::half line, lv::OctaPixel* data){
+    
+    static lv::half pixels[lvk_display_w];
+    static lv::OctaPixel octapixel;
+    static unsigned int drawn;
+    
+    drawn = 0;
+
+    for (unsigned int octa = 0; octa <= lvk_octaspixels_per_line; octa++){
+        octapixel = *(data+octa);
+        for (unsigned int pixel = 0; pixel < 8 && drawn < lvk_display_w; pixel++) {
+
+            switch (pixel) {
+                case 0: pixels[drawn] = palette[octapixel.xa]; break;
+                case 1: pixels[drawn] = palette[octapixel.xb]; break;
+                case 2: pixels[drawn] = palette[octapixel.xc]; break;
+                case 3: pixels[drawn] = palette[octapixel.xd]; break; 
+                case 4: pixels[drawn] = palette[octapixel.xe]; break;
+                case 5: pixels[drawn] = palette[octapixel.xf]; break;
+                case 6: pixels[drawn] = palette[octapixel.xg]; break;
+                case 7: pixels[drawn] = palette[octapixel.xh]; break;
+            }
+
+            drawn++;
+        }
     }
 
     LCD::shared().drawLine( (unsigned short*) &pixels);
+
 }
 
 extern "C" {
