@@ -15,12 +15,12 @@ installEngine(){
 
 flashSandbox(){
     #todo: ask device name
-    /Users/$(eval whoami)/bin/particle flash lvndr sandbox/game.ino sandbox/lvk.h src/driver engine/lv-engine
+    /Users/$(eval whoami)/bin/particle flash lvndr sandbox/game.ino sandbox/scenes sandbox/lvk.h src/driver engine/lv-engine
 }
 
 compileSandbox(){
     #todo: ask device name
-    /Users/$(eval whoami)/bin/particle compile photon sandbox/game.ino sandbox/lvk.h src/driver engine/lv-engine --saveTo firmware.bin
+    /Users/$(eval whoami)/bin/particle compile photon sandbox/game.ino sandbox/scenes sandbox/lvk.h src/driver engine/lv-engine --saveTo firmware.bin
 }
 
 ## what should we do?
