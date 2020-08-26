@@ -19,20 +19,24 @@ void setup() {
 
 void loop() {
 
-  // wait for v-sync
-  if (!LCD::shared().waitingFrame()) return;
-  
-  SINGLE_THREADED_BLOCK(){
+  if (!onlineTrigger) {  
 
-    // then draw frame buffer to display
-    LCD::shared().beginDrawing();
-    lvDirector.draw();
-    LCD::shared().endDrawing();
-  }
+    // wait for v-sync
+    if (!LCD::shared().waitingFrame()) return;
 
-  // and update game logic
-  // leaving graphics ready for next v-sync
-  lvDirector.update();
+    SINGLE_THREADED_BLOCK(){
+
+      // then draw frame buffer to display
+      LCD::shared().beginDrawing();
+      lvDirector.draw();
+      LCD::shared().endDrawing();
+    }
+
+    // and update game logic
+    // leaving graphics ready for next v-sync
+    lvDirector.update();
+
+  } 
 
   if (digitalRead(D6) == HIGH) onlineTrigger = true;
   if (onlineTrigger) pinSetFast(D7);

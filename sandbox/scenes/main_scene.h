@@ -5,5 +5,6 @@
 
 void MainScene_setup();
 void MainScene_onEnter();
-void MainScene_onFrame(unsigned short frame);
+void MainScene_onFrame();
 void MainScene_onExit();
+void MainScene_onAwake();

@@ -104,7 +104,7 @@ void LCD::configureInterrupts(){
     // set the timer frequency
     timerInitStructure.TIM_Prescaler      = 1;
     timerInitStructure.TIM_CounterMode    = TIM_CounterMode_Up;
-    timerInitStructure.TIM_Period         = 2400;
+    timerInitStructure.TIM_Period         = 1000000;
     timerInitStructure.TIM_ClockDivision  = TIM_CKD_DIV4;
     TIM_TimeBaseInit(TIMx, &timerInitStructure);
 
