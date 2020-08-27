@@ -1,4 +1,4 @@
-#include "display/pins.h"
+#include "lv-driver/display/pins.h"
 
 Pins::Pins(){
     chip_select     = A2;

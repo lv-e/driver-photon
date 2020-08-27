@@ -1,9 +1,9 @@
 #pragma once
 
-#include "display/pins.h"
-#include "display/geometry.h"
-#include "engine.h"
-#include "lvk.h"
+#include "lv-driver/display/pins.h"
+#include "lv-driver/display/geometry.h"
+#include "lv-engine/engine.h"
+#include "lv-game/lvk.h"
 
 const unsigned short lcd_width     = lvk_display_w;
 const unsigned short lcd_height    = lvk_display_h;

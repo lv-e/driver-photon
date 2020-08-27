@@ -1,6 +1,6 @@
-#include "driver.h"
-#include "engine.h"
-#include "main_scene.h"
+#include "lv-driver/driver.h"
+#include "lv-engine/engine.h"
+#include "lv-game/scene_main.h"
 
 SYSTEM_MODE(MANUAL);
 bool onlineTrigger = false;
@@ -13,8 +13,8 @@ void setup() {
 
   pinMode(D6, INPUT_PULLDOWN);
   
-  MainScene_setup();
-  lvDirector.runScene(MainSceneID);
+  scene_main_setup();
+  lvDirector.runScene(SCENE_MAIN);
 }
 
 void loop() {
