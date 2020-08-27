@@ -1,4 +1,4 @@
-#include "pins.h"
+#include "display/pins.h"
 
 Pins::Pins(){
     chip_select     = A2;

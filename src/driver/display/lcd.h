@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pins.h"
-#include "geometry.h"
+#include "display/pins.h"
+#include "display/geometry.h"
 #include "engine.h"
 #include "lvk.h"
 

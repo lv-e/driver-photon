@@ -4,6 +4,12 @@ echo "hi! this is particle's photon driver mantenance script for lv-engine"
 
 ## available commands
 
+buildDockerImage(){
+    docker login
+    docker build -t lvedock/lve_particle_photon .
+    docker push lvedock/lve_particle_photon
+}
+
 installEngine(){
     #todo: checkout on tag?
     git submodule add --force --depth=1 git@github.com:lv-e/engine.git
@@ -30,12 +36,14 @@ while true; do
         echo "1) update game engine"
         echo "2) compile and flash sandbox game"
         echo "3) just compile and generate firmware"
+        echo "4) build and publish docker image"
         read -p "choose one: " opt; echo "--"
 
         case $opt in
             1) installEngine; break;;
             2) flashSandbox; break;;
             3) compileSandbox; break;;
+            4) buildDockerImage; break;;
             * ) echo "ok! bye."; exit;;
         esac
 done

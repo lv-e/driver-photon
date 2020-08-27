@@ -1,4 +1,4 @@
-#include "lcd.h"
+#include "display/lcd.h"
 #include <Particle.h>
 
 
