@@ -32,7 +32,8 @@
         "queue": "cpp",
         "random": "cpp",
         "regex": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "__locale": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "files.exclude": {
