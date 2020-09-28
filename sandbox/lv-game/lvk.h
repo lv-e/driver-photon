@@ -1,5 +1,7 @@
 #pragma once 
 
+#define USE_OCTAPIXELS 1
+
 #ifndef lvk_scene_count
 #define lvk_scene_count 3
 #endif

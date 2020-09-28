@@ -1,7 +1,7 @@
 #include "lv-driver/display/lcd.h"
 #include <Particle.h>
 
-
+#ifdef USE_OCTAPIXELS
 void lvDriver_DrawHLine(lv::half line, lv::OctaPixel* data){
     
     static lv::half pixels[lvk_display_w];
@@ -29,9 +29,24 @@ void lvDriver_DrawHLine(lv::half line, lv::OctaPixel* data){
         }
     }
 
-    LCD::shared().drawLine( (unsigned short*) &pixels);
+    LCD::shared().drawLine(pixels);
 
 }
+#else 
+
+unsigned short hLinePixels[lvk_display_w];
+
+void lvDriver_DrawHLine(lv::half line, lv::octet (&stream)[lvk_display_w]){
+    
+    lv::half pixelCursor = 0;
+
+    do {
+        hLinePixels[pixelCursor] = palette[stream[pixelCursor]];
+    } while (pixelCursor++ < lvk_display_w);
+
+    LCD::shared().drawLine(hLinePixels);
+}
+#endif
 
 extern "C" {
 
@@ -69,9 +84,15 @@ void LCD::beginDrawing(){
     _pins.configureAsData();
 }
 
-void LCD::drawLine(unsigned short* data){
-    SPI.transfer((void*) data, NULL, lcd_width * 2, NULL);
+#ifdef USE_OCTAPIXELS
+void LCD::drawLine(unsigned short (&data)[lvk_display_w]){
+    SPI.transfer((byte*) data, NULL, lvk_display_w * 2, NULL);
 }
+#else 
+void LCD::drawLine(unsigned short (&data)[lvk_display_w]){
+    SPI.transfer((byte*) data, NULL, lvk_display_w * 2, NULL);
+}
+#endif
 
 void LCD::endDrawing() {
     _pins.endTransmission();

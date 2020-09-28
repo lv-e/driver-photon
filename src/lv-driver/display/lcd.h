@@ -58,7 +58,8 @@ class LCD {
 
         bool waitingFrame();
         void beginDrawing();
-        void drawLine(unsigned short* data);
+		
+        void drawLine(unsigned short (&data)[lvk_display_w]);
         void endDrawing();
 
         ~LCD(void);
