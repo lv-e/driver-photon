@@ -21,7 +21,7 @@ installEngine(){
 
 flashSandbox(){
     #todo: ask device name
-    /Users/$(eval whoami)/bin/particle flash lvndr game/game.ino sandbox/ src/ engine/
+    /Users/$(eval whoami)/bin/particle flash lvndr-416 game/game.ino sandbox/ src/ engine/
 }
 
 compileSandbox(){

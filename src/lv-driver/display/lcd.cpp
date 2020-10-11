@@ -125,7 +125,7 @@ void LCD::configureInterrupts(){
     // set the timer frequency
     timerInitStructure.TIM_Prescaler      = 1;
     timerInitStructure.TIM_CounterMode    = TIM_CounterMode_Up;
-    timerInitStructure.TIM_Period         = 1000000;
+    timerInitStructure.TIM_Period         = lvk_60hz ? 500000 : 1000000;
     timerInitStructure.TIM_ClockDivision  = TIM_CKD_DIV4;
     TIM_TimeBaseInit(TIMx, &timerInitStructure);
 
@@ -136,7 +136,6 @@ void LCD::configureInterrupts(){
     TIM_ITConfig(TIMx, TIM_IT_Update, ENABLE);
     TIM_Cmd(TIMx, ENABLE);
 
-    // clear(0x00);
 }
 
 void LCD::sendResetCommand(){
