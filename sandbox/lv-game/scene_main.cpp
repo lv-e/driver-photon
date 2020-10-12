@@ -186,6 +186,11 @@ Prips::Byte* image = NULL;
 unsigned int width;
 unsigned int height;
 
+const unsigned char rlePen[] = {0x63,0x52,0x0,0x1,0x16,0x15,0x14,0x5,0x1b,0x0,0x1e,0x1,0x23,0x82,0xd6,0x35,0xd,0xb8,0xa9,0x61,0x99,0x62,0xae,0x18,0x2d,0xb0,0xb,0x0,0x1,0x15,0xb4,0x21,0x5e,0x21,0x5e,0x21,0xb4,0x20,0x40,0xb6,0x30,0xa2,0x33,0x9e,0x8a,0x64,0xb7,0x85,0xe5,0x6c,0xe,0x80,0x4,0xf3,0x1c,0x59,0x85,0x15,0xd7,0xe4,0x18,0x41,0x84,0x18,0x47,0x49,0x65,0x25,0xe5,0x24,0xbb,0x71,0x49,0xf2,0xd2,0xa4,0x9a,0x4c,0x61,0x72,0xba};
+Prips::Byte* pen_image = NULL;
+unsigned int pen_width;
+unsigned int pen_height;
+
 void scene_main_setup() {
     scenesTable[SCENE_MAIN] = {
         &scene_main_on_awake,
@@ -201,29 +206,32 @@ void scene_main_on_awake() {
 
 void scene_main_on_enter() {
 
-	Prips::File *p = new Prips::File((const unsigned char *const) rleImage);
-	width = p->width;
-	height = p->height;
-	image = p->decompress();
-	delete(p);
+	Prips::File *p1 = new Prips::File((const unsigned char *const) rleImage);
+	width = p1->width;
+	height = p1->height;
+	image = p1->decompress();
+	delete(p1);	
+		
+	Prips::File *p2 = new Prips::File((const unsigned char *const) rlePen);
+	pen_width = p2->width;
+	pen_height = p2->height;
+	pen_image = p2->decompress();
+	delete(p2);	
 
     frame = 0;
 }
 
 void scene_main_on_frame() {
 
-	lvDisplay.blit(lv::Region(0, 0, width, height), (const lv::octet *const) image);
-	lvDisplay.blit(lv::Region(1, 1, width, height), (const lv::octet *const) image);
-	lvDisplay.blit(lv::Region(2, 0, width, height), (const lv::octet *const) image);
+	lvDisplay.transfer(lv::Region(0, 0, width, height), (const lv::octet *const) image);
 
-	lv::i16 s = 10 + (lv::i16) (cosf(((float) frame) / 40.0) * 90.0);
 
-	lvDisplay.blit(lv::Region(s - width, 0, width, height), (const lv::octet *const) image);
-	lvDisplay.blit(lv::Region(s , 0, width, height), (const lv::octet *const) image);
-	lvDisplay.blit(lv::Region(s + width , 0, width, height), (const lv::octet *const) image);
-
-	if(lvDisplay.fps() < 29) lvDisplay.fillRect(lv::Region( 4, 130 - 14, 10, 10), 28);
+	for (int x = 0; x < 30; x++) {
+		lvDisplay.blit(lv::Region(x * 4, 90, pen_width, pen_height), (const lv::octet *const) pen_image);
+	}
 	
+
+	if(lvDisplay.fps() < 29) lvDisplay.fillRect(lv::Region( 4, 130 - 14, 10, 10), 28);	
 	frame += 1;
 }
 
