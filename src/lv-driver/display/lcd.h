@@ -50,7 +50,8 @@ class LCD {
     public:
 
         static LCD& shared(){
-            static LCD instance; return instance;
+            static LCD instance;
+			return instance;
         }
         
         void setup();

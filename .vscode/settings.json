@@ -33,7 +33,8 @@
         "random": "cpp",
         "regex": "cpp",
         "stack": "cpp",
-        "__locale": "cpp"
+        "__locale": "cpp",
+        "cstddef": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "files.exclude": {

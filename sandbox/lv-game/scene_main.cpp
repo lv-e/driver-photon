@@ -212,14 +212,19 @@ void scene_main_on_enter() {
 
 void scene_main_on_frame() {
 
-	lvDisplay.blit(lv::Region(10, 0, width, height), (const lv::octet *const) image);
-	lvDisplay.blit(lv::Region(20, 0, width, height), (const lv::octet *const) image);
-	lvDisplay.blit(lv::Region(30, 0, width, height), (const lv::octet *const) image);
+	lvDisplay.blit(lv::Region(0, 0, width, height), (const lv::octet *const) image);
+	lvDisplay.blit(lv::Region(1, 1, width, height), (const lv::octet *const) image);
+	lvDisplay.blit(lv::Region(2, 0, width, height), (const lv::octet *const) image);
 
-	lvDisplay.blit(lv::Region(frame%128 - 128, 0, width, height), (const lv::octet *const) image);
-	lvDisplay.blit(lv::Region(frame%128, 0, width, height), (const lv::octet *const) image);
+	lv::i16 s = 10 + (lv::i16) (cosf(((float) frame) / 40.0) * 90.0);
 
-	frame++;
+	lvDisplay.blit(lv::Region(s - width, 0, width, height), (const lv::octet *const) image);
+	lvDisplay.blit(lv::Region(s , 0, width, height), (const lv::octet *const) image);
+	lvDisplay.blit(lv::Region(s + width , 0, width, height), (const lv::octet *const) image);
+
+	if(lvDisplay.fps() < 29) lvDisplay.fillRect(lv::Region( 4, 130 - 14, 10, 10), 28);
+	
+	frame += 1;
 }
 
 void scene_main_on_exit() {

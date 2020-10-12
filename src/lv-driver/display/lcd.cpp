@@ -34,11 +34,13 @@ void lvDriver_DrawHLine(lv::half line, lv::OctaPixel* data){
 }
 #else 
 
-unsigned short hLinePixels[lvk_display_w];
+unsigned long frame_time;
+int fps;
 
 void lvDriver_DrawHLine(lv::half line, lv::octet (&stream)[lvk_display_w]){
-    
-    lv::half pixelCursor = 0;
+
+    static unsigned short hLinePixels[lvk_display_w];    
+    register lv::word pixelCursor = 0;
 
     do {
         hLinePixels[pixelCursor] = palette[stream[pixelCursor]];
@@ -46,6 +48,11 @@ void lvDriver_DrawHLine(lv::half line, lv::octet (&stream)[lvk_display_w]){
 
     LCD::shared().drawLine(hLinePixels);
 }
+
+extern lv::octet lvDriver_CurrentFPS(void){
+    return (lv::octet) fps;
+}
+
 #endif
 
 extern "C" {
@@ -65,7 +72,15 @@ LCD::LCD(Region region, Pins pins) : _drawRegion(region), _pins(pins){
 LCD::~LCD(void) {}
 
 void LCD::setup(){
+
     if(_ready) return;
+
+    if(lvk_measuring_fps){
+        frame_time  = millis();
+        fps         = 0;
+        Particle.variable("fps", &fps, INT);
+    }
+
     configureSPI();
     sendResetCommand();
     sendStartupSequence();
@@ -97,6 +112,14 @@ void LCD::drawLine(unsigned short (&data)[lvk_display_w]){
 void LCD::endDrawing() {
     _pins.endTransmission();
     isrActivated = false;
+
+    // gather metrics
+    if (lvk_measuring_fps) {        
+        unsigned long now = millis();
+        unsigned long diff = now - frame_time;
+        fps = (int) abs( 1.0 / (((float) diff)/ 1000.0));
+        frame_time = now;
+    }
 }
 
 void LCD::configureSPI(){
@@ -123,9 +146,9 @@ void LCD::configureInterrupts(){
     NVIC_Init(&nvicStructure);
 
     // set the timer frequency
-    timerInitStructure.TIM_Prescaler      = 1;
+    timerInitStructure.TIM_Prescaler      = 4;
     timerInitStructure.TIM_CounterMode    = TIM_CounterMode_Up;
-    timerInitStructure.TIM_Period         = lvk_60hz ? 500000 : 1000000;
+    timerInitStructure.TIM_Period         = lvk_60hz ? 200000 : 400000;
     timerInitStructure.TIM_ClockDivision  = TIM_CKD_DIV4;
     TIM_TimeBaseInit(TIMx, &timerInitStructure);
 

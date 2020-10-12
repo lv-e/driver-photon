@@ -5,9 +5,6 @@
 SYSTEM_MODE(MANUAL);
 bool onlineTrigger = false;
 
-unsigned long ptime;
-int fps;
-
 void setup() {
 
   // setup SPI & timers
@@ -18,10 +15,7 @@ void setup() {
   
   scene_main_setup();
   lvDirector.runScene(SCENE_MAIN);
-
-  ptime = millis();
-  fps = 0;
-  Particle.variable("fps", &fps, INT);
+  
 }
 
 void loop() {
@@ -42,12 +36,6 @@ void loop() {
     // and update game logic
     // leaving graphics ready for next v-sync
     lvDirector.update();
-
-    unsigned long ctime = millis();
-    unsigned long diff = ctime - ptime;
-    fps = (int) (1. / (((float) diff)/ 1000.0));
-    ptime = ctime;
-
   } 
 
   if (digitalRead(D6) == HIGH) onlineTrigger = true;
