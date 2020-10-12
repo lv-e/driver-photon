@@ -227,7 +227,7 @@ void scene_main_on_frame() {
 
 
 	for (int x = 0; x < 30; x++) {
-		lvDisplay.blit(lv::Region(x * 4, 90, pen_width, pen_height), (const lv::octet *const) pen_image);
+		lvDisplay.blit(lv::Region(x * 4, x%5 * 15, pen_width, pen_height), (const lv::octet *const) pen_image);
 	}
 	
 
