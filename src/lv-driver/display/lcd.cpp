@@ -75,11 +75,11 @@ void LCD::setup(){
 
     if(_ready) return;
 
-    if(lvk_measuring_fps){
+    #if lvk_measuring_fps == true
         frame_time  = millis();
         fps         = 0;
         Particle.variable("fps", &fps, INT);
-    }
+    #endif
 
     configureSPI();
     sendResetCommand();
@@ -114,12 +114,12 @@ void LCD::endDrawing() {
     isrActivated = false;
 
     // gather metrics
-    if (lvk_measuring_fps) {        
+    #if lvk_measuring_fps == true
         unsigned long now = millis();
         unsigned long diff = now - frame_time;
         fps = (int) abs( 1.0 / (((float) diff)/ 1000.0));
         frame_time = now;
-    }
+    #endif
 }
 
 void LCD::configureSPI(){
