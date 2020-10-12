@@ -9,7 +9,7 @@ void setup() {
 
   // setup SPI & timers
   LCD::shared().setup();
-  lvDisplay.clear();
+  lvDisplay.clear(0);
 
   pinMode(D6, INPUT_PULLDOWN);
   

@@ -223,16 +223,17 @@ void scene_main_on_enter() {
 
 void scene_main_on_frame() {
 
+	lvDisplay.clear(12);
+
 	lvDisplay.transfer(lv::Region(0, 0, width, height), (const lv::octet *const) image);
 
-
 	for (int x = 0; x < 30; x++) {
-		lvDisplay.blit(lv::Region(x * 4, x%5 * 15, pen_width, pen_height), (const lv::octet *const) pen_image);
+		lvDisplay.blit(lv::Region( frame%260 + (x * 4) - 130, x%5 * 20, pen_width, pen_height), (const lv::octet *const) pen_image);
 	}
 	
-
 	if(lvDisplay.fps() < 29) lvDisplay.fillRect(lv::Region( 4, 130 - 14, 10, 10), 28);	
 	frame += 1;
+	
 }
 
 void scene_main_on_exit() {
