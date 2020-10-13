@@ -34,7 +34,8 @@
         "regex": "cpp",
         "stack": "cpp",
         "__locale": "cpp",
-        "cstddef": "cpp"
+        "cstddef": "cpp",
+        "new": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "files.exclude": {

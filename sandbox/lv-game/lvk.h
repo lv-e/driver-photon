@@ -14,14 +14,10 @@
 #define lvk_display_w 130
 #endif
 
-#ifndef lvk_octaspixels_per_line
-#define lvk_octaspixels_per_line 17
-#endif
-
 #ifndef lvk_60hz
 #define lvk_60hz 0
 #endif
 
 #ifndef lvk_measuring_fps
-#define lvk_measuring_fps true
+#define lvk_measuring_fps false
 #endif
