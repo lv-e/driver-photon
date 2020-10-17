@@ -164,7 +164,7 @@ namespace Prips{
 				}
 
 				delete p;
-				p == NULL;
+				p = NULL;
 			}
 
 			for (ui16 y = 0; y < height; y++) {
@@ -247,5 +247,5 @@ void scene_main_on_frame() {
 
 void scene_main_on_exit() {
 	delete PNG::penpen;
-	PNG::penpen = nil;
+	PNG::penpen = NULL;
 }

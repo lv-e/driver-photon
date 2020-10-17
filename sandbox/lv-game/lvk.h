@@ -19,5 +19,5 @@
 #endif
 
 #ifndef lvk_measuring_fps
-#define lvk_measuring_fps false
+#define lvk_measuring_fps true
 #endif

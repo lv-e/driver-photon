@@ -1,4 +1,6 @@
 #include "lv-driver/display/lcd.h"
+#include "lv-driver/display/diagnostics.h"
+
 #include <Particle.h>
 
 #ifdef USE_OCTAPIXELS
@@ -35,7 +37,7 @@ void lvDriver_DrawHLine(lv::half line, lv::OctaPixel* data){
 #else 
 
 unsigned long frame_time;
-int fps;
+int fps, free_memory;
 
 void lvDriver_DrawHLine(lv::half line, lv::octet (&stream)[lvk_display_w]){
 
@@ -62,7 +64,7 @@ extern "C" {
     void timerISRoutine() {
         TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
         isrActivated = true;
-    }
+    }  
 }
 
 LCD::LCD(Region region, Pins pins) : _drawRegion(region), _pins(pins){
@@ -79,6 +81,10 @@ void LCD::setup(){
         frame_time  = millis();
         fps         = 0;
         Particle.variable("fps", &fps, INT);
+
+        free_memory = DiagnosticsHelper::getValue(DIAG_ID_SYSTEM_FREE_MEMORY);
+        Particle.variable("free_memory", &free_memory, INT);
+
     #endif
 
     configureSPI();
@@ -115,10 +121,14 @@ void LCD::endDrawing() {
 
     // gather metrics
     #if lvk_measuring_fps == true
+
         unsigned long now = millis();
         unsigned long diff = now - frame_time;
         fps = (int) abs( 1.0 / (((float) diff)/ 1000.0));
         frame_time = now;
+
+        free_memory = DiagnosticsHelper::getValue(DIAG_ID_SYSTEM_USED_RAM);
+
     #endif
 }
 
