@@ -18,6 +18,6 @@
 #define lvk_60hz 0
 #endif
 
-#ifndef lvk_measuring_fps
-#define lvk_measuring_fps true
+#ifndef lvk_measuring
+#define lvk_measuring true
 #endif

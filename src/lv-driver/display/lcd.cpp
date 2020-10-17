@@ -36,8 +36,10 @@ void lvDriver_DrawHLine(lv::half line, lv::OctaPixel* data){
 }
 #else 
 
+#if lvk_measuring == true
 unsigned long frame_time;
 int fps, free_memory;
+#endif
 
 void lvDriver_DrawHLine(lv::half line, lv::octet (&stream)[lvk_display_w]){
 
@@ -77,7 +79,7 @@ void LCD::setup(){
 
     if(_ready) return;
 
-    #if lvk_measuring_fps == true
+    #if lvk_measuring == true
         frame_time  = millis();
         fps         = 0;
         Particle.variable("fps", &fps, INT);
@@ -120,7 +122,7 @@ void LCD::endDrawing() {
     isrActivated = false;
 
     // gather metrics
-    #if lvk_measuring_fps == true
+    #if lvk_measuring == true
 
         unsigned long now = millis();
         unsigned long diff = now - frame_time;
