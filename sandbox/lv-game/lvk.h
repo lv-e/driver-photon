@@ -21,3 +21,7 @@
 #ifndef lvk_measuring
 #define lvk_measuring true
 #endif
+
+#ifndef lvk_gamepads
+#define lvk_gamepads 1
+#endif

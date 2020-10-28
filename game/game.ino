@@ -12,6 +12,7 @@ void setup() {
   lvDisplay.clear(0);
 
   pinMode(D6, INPUT_PULLDOWN);
+  pinMode(D7, OUTPUT);
   
   scene_main_setup();
   lvDirector.runScene(SCENE_MAIN);
@@ -38,7 +39,7 @@ void loop() {
     lvDirector.update();
   } 
 
-  if (digitalRead(D6) == HIGH) onlineTrigger = true;
+  if (digitalRead(D6) == HIGH || lvGamepads.isUp(lvGamepad(0).select)) onlineTrigger = true;
   if (onlineTrigger) pinSetFast(D7);
   if (onlineTrigger) Particle.connect();
   if (Particle.connected()) Particle.process();

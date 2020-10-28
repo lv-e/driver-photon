@@ -158,7 +158,7 @@ namespace Prips{
 				for (ui16 y = 0; y < height; y++) {
 					for (ui16 x = 0; x < width; x++) {
 						byte b = pln ? *(buffer + (x + y * width)) : 0;
-						b = (b <<= 1) | p->nextPixelColor();
+						b = (b << 1) | p->nextPixelColor();
 						*(buffer + (x + y * width)) = b;
 					}
 				}
@@ -214,7 +214,8 @@ namespace Prips{
 
 #endif
 
-unsigned int frame;
+unsigned int x = 65;
+unsigned int y = 65;
 
 namespace PNG {
 	const unsigned char rawPenPen[] = {0x63,0x52,0x0,0x1,0x16,0x15,0x14,0x5,0x1b,0x0,0x1e,0x1,0x23,0x82,0xd6,0x35,0xd,0xb8,0xa9,0x61,0x99,0x62,0xae,0x18,0x2d,0xb0,0xb,0x0,0x1,0x15,0xb4,0x21,0x5e,0x21,0x5e,0x21,0xb4,0x20,0x40,0xb6,0x30,0xa2,0x33,0x9e,0x8a,0x64,0xb7,0x85,0xe5,0x6c,0xe,0x80,0x4,0xf3,0x1c,0x59,0x85,0x15,0xd7,0xe4,0x18,0x41,0x84,0x18,0x47,0x49,0x65,0x25,0xe5,0x24,0xbb,0x71,0x49,0xf2,0xd2,0xa4,0x9a,0x4c,0x61,0x72,0xba};
@@ -236,13 +237,30 @@ void scene_main_on_awake() {
 
 void scene_main_on_enter() {
 	PNG::penpen = new Prips::Drawable( (const Prips::byte *const) &PNG::rawPenPen);
-    frame = 0;
 }
 
 void scene_main_on_frame() {
+
 	lvDisplay.clear(0);
-	PNG::penpen->draw(20, 20);
-	frame += 1;
+
+	if (lvGamepad(0).up) y--;
+	else if (lvGamepad(0).down) y++;
+
+	if (lvGamepad(0).left) x--;
+	else if (lvGamepad(0).rigth) x++;
+
+	PNG::penpen->draw(x, y);
+
+	if(lvGamepads.isReleased(lvGamepad(0).a))  lvDisplay.fillRect(lv::Region(10,10,10,10), 5);
+	if(lvGamepads.isDown(lvGamepad(0).a))  lvDisplay.fillRect(lv::Region(20,10,10,10), 9);
+	if(lvGamepads.isPressed(lvGamepad(0).a))  lvDisplay.fillRect(lv::Region(30,10,10,10), 19);
+	if(lvGamepads.isUp(lvGamepad(0).a))  lvDisplay.fillRect(lv::Region(40,10,10,10), 28);
+
+	if(lvGamepads.isReleased(lvGamepad(0).b))  lvDisplay.fillRect(lv::Region(10,20,10,10), 5);
+	if(lvGamepads.isDown(lvGamepad(0).b))  lvDisplay.fillRect(lv::Region(20,20,10,10), 9);
+	if(lvGamepads.isPressed(lvGamepad(0).b))  lvDisplay.fillRect(lv::Region(30,20,10,10), 19);
+	if(lvGamepads.isUp(lvGamepad(0).b))  lvDisplay.fillRect(lv::Region(40,20,10,10), 28);
+
 }
 
 void scene_main_on_exit() {
