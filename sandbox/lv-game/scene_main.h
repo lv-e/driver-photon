@@ -1,8 +1,8 @@
 
 #pragma once
 
+#include "lv-game/shared.h"
 
-static unsigned char SCENE_MAIN =  1;
 void scene_main_setup();
 void scene_main_on_awake();
 void scene_main_on_enter();

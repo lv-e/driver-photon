@@ -3,6 +3,8 @@
 
 #include <Particle.h>
 
+#define USE_SPI_W_DMA
+
 #ifdef USE_OCTAPIXELS
 void lvDriver_DrawHLine(lv::half line, lv::OctaPixel* data){
     
@@ -38,7 +40,7 @@ void lvDriver_DrawHLine(lv::half line, lv::OctaPixel* data){
 
 #if lvk_measuring == true
 unsigned long frame_time;
-int fps, free_memory;
+int fps, free_memory, spi_transfer;
 #endif
 
 void lvDriver_DrawHLine(lv::half line, lv::octet (&stream)[lvk_display_w]){
@@ -53,9 +55,11 @@ void lvDriver_DrawHLine(lv::half line, lv::octet (&stream)[lvk_display_w]){
     LCD::shared().drawLine(hLinePixels);
 }
 
+#if lvk_measuring == true
 extern lv::octet lvDriver_CurrentFPS(void){
     return (lv::octet) fps;
 }
+#endif
 
 #endif
 
@@ -82,7 +86,9 @@ void LCD::setup(){
     #if lvk_measuring == true
         frame_time  = millis();
         fps         = 0;
+        spi_transfer = 0;
         Particle.variable("fps", &fps, INT);
+        Particle.variable("spi transfer", &spi_transfer, INT);
 
         free_memory = DiagnosticsHelper::getValue(DIAG_ID_SYSTEM_FREE_MEMORY);
         Particle.variable("free_memory", &free_memory, INT);
@@ -113,7 +119,23 @@ void LCD::drawLine(unsigned short (&data)[lvk_display_w]){
 }
 #else 
 void LCD::drawLine(unsigned short (&data)[lvk_display_w]){
-    SPI.transfer((byte*) data, NULL, lvk_display_w * 2, NULL);
+    
+    #if lvk_measuring == true
+        unsigned long before = micros();
+    #endif
+
+    #ifdef USE_SPI_W_DMA
+        SPI.transfer((byte*) data, NULL, lvk_display_w * 2, NULL);    
+    #else
+        for(int i = 0; i < 130; i++) {
+            SPI.transfer(data[i] >> 8);
+            SPI.transfer(data[i]);
+        }
+    #endif
+
+    #if lvk_measuring == true
+        spi_transfer = (int) (micros() - before);
+    #endif
 }
 #endif
 

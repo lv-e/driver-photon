@@ -1,6 +1,6 @@
 #include "lv-driver/driver.h"
 #include "lv-engine/engine.h"
-#include "lv-game/scene_main.h"
+#include "lv-game/bootstrap.h"
 
 SYSTEM_MODE(MANUAL);
 bool onlineTrigger = false;
@@ -14,7 +14,7 @@ void setup() {
   pinMode(D6, INPUT_PULLDOWN);
   pinMode(D7, OUTPUT);
   
-  scene_main_setup();
+  setupScenes();
   lvDirector.runScene(SCENE_MAIN);
   
 }
@@ -39,9 +39,13 @@ void loop() {
     lvDirector.update();
   } 
 
-  if (digitalRead(D6) == HIGH || lvGamepads.isUp(lvGamepad(0).select)) onlineTrigger = true;
-  if (onlineTrigger) pinSetFast(D7);
-  if (onlineTrigger) Particle.connect();
-  if (Particle.connected()) Particle.process();
+  if (lvGamepads.isUp(lvGamepad(0).select)) {
+    lvDirector.runScene(NO_SCENE);
+    onlineTrigger = true;
+    pinSetFast(D7);
+    Particle.connect();
+  }
+
+  if (onlineTrigger && Particle.connected()) Particle.process();
   
 }
